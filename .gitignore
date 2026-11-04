@@ -1,0 +1,40 @@
+# Dependencies (eng muhim - bular gitga qo'shilmasligi shart)
+node_modules/
+**/node_modules/
+
+# Production build fayllari
+dist/
+**/dist/
+build/
+**/build/
+
+# Maxfiy sozlamalar (Environment variables)
+.env
+.env.local
+.env.*.local
+**/.env
+!**/.env.example
+
+# Log fayllari
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Database vaqtincha fayllari
+*.db-journal
+
+# Muhit va IDE fayllari
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Operatsion tizim fayllari
+.DS_Store
+Thumbs.db
+Desktop.ini

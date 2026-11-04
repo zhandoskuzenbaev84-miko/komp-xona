@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Station {
+  id           String               @id @default(uuid())
+  code         String               @unique // PC-01 to PC-50, PS-ROOM-1 to PS-ROOM-5
+  name         String
+  type         String               // "PC" or "PS5"
+  zone         String               // "Standard", "VIP", "Tournament", "Console Lounge"
+  status       String               @default("AVAILABLE") // "AVAILABLE", "OCCUPIED", "MAINTENANCE"
+  specs        String               // JSON string or formatted specifications
+  amenities    String?              // VIP PS5 amenities
+  hourlyRate   Int                  // 10000 for PC, 45000 for PS5
+  twoHourRate  Int                  // 17000 for PC, 80000 for PS5
+  reservations ReservationStation[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+}
+
+model Reservation {
+  id                 String               @id @default(uuid())
+  bookingCode        String               @unique // e.g. CC-49201
+  customerName       String
+  customerPhone      String
+  customerAge        Int
+  startTime          DateTime
+  endTime            DateTime
+  requestedHours     Int
+  bonusHours         Int                  @default(0) // +1 Free hour for >= 5 stations
+  totalDurationHours Int
+  totalAmount        Int
+  discountApplied    Int                  @default(0)
+  status             String               @default("ACTIVE") // "ACTIVE", "COMPLETED", "CANCELLED"
+  notes              String?
+  stations           ReservationStation[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+}
+
+model ReservationStation {
+  id            String      @id @default(uuid())
+  reservationId String
+  stationId     String
+  reservation   Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  station       Station     @relation(fields: [stationId], references: [id], onDelete: Cascade)
+
+  @@unique([reservationId, stationId])
+}
+
+model Game {
+  id          String   @id @default(uuid())
+  title       String
+  genre       String   // "FPS", "Sports", "MOBA", "Story", "Racing", "Fighting"
+  platform    String   // "PC", "PS5", "BOTH"
+  rating      Float    @default(4.9)
+  coverImage  String
+  description String
+  installedOn String   @default("All Stations")
+  isPopular   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,18 @@
+{
+  "name": "gaming-club-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CyberClub Booking Engine - Production Grade Gaming Club & PS5 Lounge Booking Web App",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run dev:server\" \"npm run dev:client\"",
+    "start": "npm run dev",
+    "install:all": "npm --prefix gaming-club/server install && npm --prefix gaming-club/client install",
+    "dev:server": "npm --prefix gaming-club/server run dev",
+    "dev:client": "npm --prefix gaming-club/client run dev",
+    "seed": "npm --prefix gaming-club/server run seed",
+    "build:client": "npm --prefix gaming-club/client run build"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
